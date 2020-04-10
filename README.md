@@ -30,6 +30,14 @@ Run the following command to run startup migrations.
 adonis migration:run
 ```
 
+### Create User
+
+Run the following command to create users.
+
+```js
+adonis create:user
+```
+
 
 ### Run
 
