@@ -67,9 +67,9 @@ adonis serve --dev
 
 ### Adonis website
 
-[For more information]: (https://adonisjs.com)
+[For more information] (https://adonisjs.com)
 
 
 ### Api document
 
-[Click here for using REST API's]: (https://documenter.getpostman.com/view/1457532/SzYgQuWg)
+[Click here for using REST API's] (https://documenter.getpostman.com/view/1457532/SzYgQuWg)
