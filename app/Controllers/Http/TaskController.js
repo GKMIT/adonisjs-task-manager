@@ -1,50 +1,48 @@
 'use strict'
 const Task = use('App/Models/Task');
 const Antl = use('Antl')
+
+const searchInFields = [
+    'name',
+    'details'
+]
 class TaskController {
 
     async index({ request, response, view }) {
-        const where = [
-            'name',
-            'details'
-        ]
-        let page = null;
-        let perPage = null;
+        let page = 1;
+        let pageSize = 5;
 
         if (request.input('page')) {
             page = request.input('page')
         }
-        if (request.input('perPage')) {
-            perPage = request.input('perPage')
+        if (request.input('pageSize')) {
+            pageSize = request.input('pageSize')
         }
+
         const search = request.input('search')
         const orderBy = request.input('orderBy')
-        const orderPos = request.input('orderPos')
+        const orderDirection = request.input('orderDirection')
 
         const query = Task.query()
 
-        if (orderBy && orderPos) {
-            query.orderBy(`${orderBy}`, orderPos)
+        if (orderBy && orderDirection) {
+            query.orderBy(`${orderBy}`, orderDirection)
         }
         if (search) {
-            where.forEach(filed => {
+            searchInFields.forEach(filed => {
                 query.whereRaw(`${filed} LIKE '%${search}%'`)
             })
         }
 
-        let result;
-        if (page && perPage) {
-            result = await query.paginate(page, perPage)
-        } else {
-            const fetchData = await query.fetch()
-            result = {
-                total: null,
-                perPage: null,
-                page: null,
-                lastPage: null,
-                data: fetchData
-            }
+        if (request.input('filters')) {
+            const filters = JSON.parse(request.input('filters'))
+            filters.forEach(filter => {
+                query.whereRaw(`${filter.name} LIKE '%${filter.value}%'`)
+            })
         }
+
+        const result = await query.paginate(page, pageSize)
+
 
         if (result) {
             return response.status(200).send(result)
@@ -80,7 +78,7 @@ class TaskController {
         }
     }
 
-    async show({ params, request, response, view }) {        
+    async show({ params, request, response, view }) {
         const query = await Task.query().with('user').where('id', params.id).first()
         if (query) {
             return response.status(200).send(query)

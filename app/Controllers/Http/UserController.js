@@ -1,48 +1,45 @@
 'use strict'
 const User = use('App/Models/User');
 const Antl = use('Antl')
+const searchInFields = [
+    'name',
+    'details'
+]
 class UserController {
-    async index({ request, response, view }) {
-        const where = [
-            'email',
-        ]
-        let page = null;
-        let perPage = null;
+    async index({ request, response }) {
+        let page = 1;
+        let pageSize = 5;
 
         if (request.input('page')) {
             page = request.input('page')
         }
-        if (request.input('perPage')) {
-            perPage = request.input('perPage')
+        if (request.input('pageSize')) {
+            pageSize = request.input('pageSize')
         }
+
         const search = request.input('search')
         const orderBy = request.input('orderBy')
-        const orderPos = request.input('orderPos')
+        const orderDirection = request.input('orderDirection')
 
         const query = User.query()
 
-        if (orderBy && orderPos) {
-            query.orderBy(`${orderBy}`, orderPos)
+        if (orderBy && orderDirection) {
+            query.orderBy(`${orderBy}`, orderDirection)
         }
         if (search) {
-            where.forEach(filed => {
+            searchInFields.forEach(filed => {
                 query.whereRaw(`${filed} LIKE '%${search}%'`)
             })
         }
 
-        let result;
-        if (page && perPage) {
-            result = await query.paginate(page, perPage)
-        } else {
-            const fetchData = await query.fetch()
-            result = {
-                total: null,
-                perPage: null,
-                page: null,
-                lastPage: null,
-                data: fetchData
-            }
+        if (request.input('filters')) {
+            const filters = JSON.parse(request.input('filters'))
+            filters.forEach(filter => {
+                query.whereRaw(`${filter.name} LIKE '%${filter.value}%'`)
+            })
         }
+
+        const result = await query.paginate(page, pageSize)
 
         if (result) {
             return response.status(200).send(result)
@@ -70,7 +67,7 @@ class UserController {
                     message: Antl.formatMessage('response.something_went_wrong')
                 })
             }
-            
+
         } else {
             return response.status(404).send({
                 message: Antl.formatMessage('response.not_found', { name: "User" })
@@ -78,7 +75,7 @@ class UserController {
         }
     }
 
-    async show({ params, request, response, view }) {
+    async show({ params, response }) {
         const query = await User.query().with('tasks').where('id', params.id).first()
         if (query) {
             return response.status(200).send(query)
@@ -111,7 +108,7 @@ class UserController {
         }
     }
 
-    async destroy({ params, request, response }) {
+    async destroy({ params, response }) {
         let query = await User.find(params.id)
         if (query) {
             const result = await query.delete()
