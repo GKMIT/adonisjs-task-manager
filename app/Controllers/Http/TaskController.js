@@ -8,7 +8,7 @@ const searchInFields = [
 ]
 class TaskController {
 
-    async index({ request, response, view }) {
+    async index({ request, response }) {
         let page = 1;
         let pageSize = 5;
 
@@ -78,7 +78,7 @@ class TaskController {
         }
     }
 
-    async show({ params, request, response, view }) {
+    async show({ params, response }) {
         const query = await Task.query().with('user').where('id', params.id).first()
         if (query) {
             return response.status(200).send(query)
@@ -112,7 +112,7 @@ class TaskController {
         }
     }
 
-    async destroy({ params, request, response }) {
+    async destroy({ params, response }) {
         let query = await Task.find(params.id)
         if (query) {
             const result = await query.delete()
