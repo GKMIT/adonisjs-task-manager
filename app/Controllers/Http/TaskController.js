@@ -60,16 +60,10 @@ class TaskController {
             query.name = request.input('name')
             query.details = request.input('details')
 
-            const result = await query.save()
-            if (result) {
-                return response.status(200).send({
-                    message: Antl.formatMessage('response.create_success', { name: "Task" })
-                })
-            } else {
-                return response.status(500).send({
-                    message: Antl.formatMessage('response.something_went_wrong')
-                })
-            }
+            await query.save()
+            return response.status(200).send({
+                message: Antl.formatMessage('response.create_success', { name: "Task" })
+            })
 
         } else {
             return response.status(404).send({
@@ -95,16 +89,10 @@ class TaskController {
             query.user_id = request.input('user_id')
             query.name = request.input('name')
             query.details = request.input('details')
-            const result = await query.save()
-            if (result) {
-                return response.status(200).send({
-                    message: Antl.formatMessage('response.update_success', { name: "Task" })
-                })
-            } else {
-                return response.status(500).send({
-                    message: Antl.formatMessage('response.something_went_wrong')
-                })
-            }
+            await query.save()
+            return response.status(200).send({
+                message: Antl.formatMessage('response.update_success', { name: "Task" })
+            })
         } else {
             return response.status(404).send({
                 message: Antl.formatMessage('response.not_found', { name: "Task" })

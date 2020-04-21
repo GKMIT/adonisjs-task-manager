@@ -1,18 +1,17 @@
 'use strict'
 
-class StoreUser {
-
+class StorePermission {
   get rules() {
     const id = this.ctx.params.id
     if (id) {
       return {
-        email: `required|email|unique:users,email,id,${id}`,
-        name: 'required'
+        code: `required|unique:permissions,code,id,${id}`,
+        details: 'required'
       }
     } else {
       return {
-        email: `required|email|unique:users,email`,
-        name: 'required'
+        code: `required|unique:permissions,code`,
+        details: 'required'
       }
     }
   }
@@ -26,4 +25,4 @@ class StoreUser {
   }
 }
 
-module.exports = StoreUser
+module.exports = StorePermission

@@ -1,12 +1,11 @@
 'use strict'
-const User = use('App/Models/User');
+const Permission = use('App/Models/Permission');
 const Antl = use('Antl')
 const searchInFields = [
-    'name',
-    'mobile',
-    'email',
+    'code',
+    'details',
 ]
-class UserController {
+class PermissionController {
     async index({ request, response }) {
         let page = 1;
         let pageSize = 5;
@@ -22,7 +21,7 @@ class UserController {
         const orderBy = request.input('orderBy')
         const orderDirection = request.input('orderDirection')
 
-        const query = User.query()
+        const query = Permission.query()
 
         if (orderBy && orderDirection) {
             query.orderBy(`${orderBy}`, orderDirection)
@@ -46,67 +45,64 @@ class UserController {
             return response.status(200).send(result)
         } else {
             return response.status(404).send({
-                message: Antl.formatMessage('response.not_found', { name: "User" })
+                message: Antl.formatMessage('response.not_found', { name: "Permission" })
             })
         }
     }
 
     async store({ request, response }) {
-        const query = new User()
+        const query = new Permission()
         if (query) {
 
-            query.role_id = request.input('role_id')
-            query.name = request.input('name')
-            query.mobile = request.input('mobile')
-            query.email = request.input('email')
+            query.code = request.input('code')
+            query.details = request.input('details')
             await query.save()
             return response.status(200).send({
-                message: Antl.formatMessage('response.create_success', { name: "User" })
+                message: Antl.formatMessage('response.create_success', { name: "Permission" })
             })
 
         } else {
             return response.status(404).send({
-                message: Antl.formatMessage('response.not_found', { name: "User" })
+                message: Antl.formatMessage('response.not_found', { name: "Permission" })
             })
         }
     }
 
     async show({ params, response }) {
-        const query = await User.query().with('tasks').where('id', params.id).first()
+        const query = await Permission.query().where('id', params.id).first()
         if (query) {
             return response.status(200).send(query)
         } else {
             return response.status(404).send({
-                message: Antl.formatMessage('response.not_found', { name: "User" })
+                message: Antl.formatMessage('response.not_found', { name: "Permission" })
             })
         }
     }
 
     async update({ params, request, response }) {
-        let query = await User.find(params.id)
+        let query = await Permission.find(params.id)
         if (query) {
-            query.role_id = request.input('role_id')
-            query.name = request.input('name')
-            query.mobile = request.input('mobile')
-            query.email = request.input('email')
+
+            query.code = request.input('code')
+            query.details = request.input('details')
             await query.save()
             return response.status(200).send({
-                message: Antl.formatMessage('response.update_success', { name: "User" })
+                message: Antl.formatMessage('response.update_success', { name: "Permission" })
             })
         } else {
             return response.status(404).send({
-                message: Antl.formatMessage('response.not_found', { name: "User" })
+                message: Antl.formatMessage('response.not_found', { name: "Permission" })
             })
         }
     }
 
     async destroy({ params, response }) {
-        let query = await User.find(params.id)
+        let query = await Permission.find(params.id)
         if (query) {
             const result = await query.delete()
             if (result) {
                 return response.status(200).send({
-                    message: Antl.formatMessage('response.delete_success', { name: "User" })
+                    message: Antl.formatMessage('response.delete_success', { name: "Permission" })
                 })
             } else {
                 return response.status(500).send({
@@ -115,31 +111,11 @@ class UserController {
             }
         } else {
             return response.status(404).send({
-                message: Antl.formatMessage('response.not_found', { name: "User" })
+                message: Antl.formatMessage('response.not_found', { name: "Permission" })
             })
         }
     }
 
-    async changePassword({ params, request, response }) {
-        let query = await User.find(params.id)
-        if (query) {
-            query.password = request.input('password')
-            const result = await query.save()
-            if (result) {
-                return response.status(200).send({
-                    message: Antl.formatMessage('response.password_update_success', { name: "User" })
-                })
-            } else {
-                return response.status(500).send({
-                    message: Antl.formatMessage('response.something_went_wrong')
-                })
-            }
-        } else {
-            return response.status(404).send({
-                message: Antl.formatMessage('response.not_found', { name: "User" })
-            })
-        }
-    }
 }
 
-module.exports = UserController
+module.exports = PermissionController

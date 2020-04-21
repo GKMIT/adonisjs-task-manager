@@ -34,6 +34,22 @@ Route.group(() => {
 }).prefix('/users').middleware('auth')
 
 Route.group(() => {
+    Route.get('/', 'PermissionController.index')
+    Route.get('/:id', 'PermissionController.show')
+    Route.post('/', 'PermissionController.store').validator('StorePermission')
+    Route.put('/:id', 'PermissionController.update').validator('StorePermission')
+    Route.delete('/:id', 'PermissionController.destroy')
+}).prefix('/permissions').middleware('auth')
+
+Route.group(() => {
+    Route.get('/', 'RoleController.index')
+    Route.get('/:id', 'RoleController.show')
+    Route.post('/', 'RoleController.store').validator('StoreRole')
+    Route.put('/:id', 'RoleController.update').validator('StoreRole')
+    Route.delete('/:id', 'RoleController.destroy')
+}).prefix('/roles').middleware('auth')
+
+Route.group(() => {
     Route.get('/', 'TaskController.index')
     Route.get('/:id', 'TaskController.show')
     Route.post('/', 'TaskController.store').validator('StoreTask')
