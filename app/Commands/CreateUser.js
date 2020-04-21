@@ -35,6 +35,7 @@ class CreateUser extends Command {
       }
     } else {
       let query = new User()
+      query.role_id = 1
       query.email = email
       query.password = password
       const result = await query.save()
