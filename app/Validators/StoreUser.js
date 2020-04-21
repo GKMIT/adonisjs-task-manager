@@ -7,12 +7,12 @@ class StoreUser {
     if (id) {
       return {
         email: `required|email|unique:users,email,id,${id}`,
-        password: 'required'
+        name: 'required'
       }
     } else {
       return {
         email: `required|email|unique:users,email`,
-        password: 'required'
+        name: 'required'
       }
     }
   }
