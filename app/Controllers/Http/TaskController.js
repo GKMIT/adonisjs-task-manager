@@ -4,6 +4,10 @@ const Antl = use('Antl')
 
 const searchInFields = [
     'name',
+    'start_date',
+    'start_time',
+    'end_date',
+    'end_time',
     'details'
 ]
 class TaskController {
@@ -58,6 +62,10 @@ class TaskController {
         if (query) {
             query.user_id = request.input('user_id')
             query.name = request.input('name')
+            query.start_date = request.input('start_date')
+            query.start_time = request.input('start_time')
+            query.end_date = request.input('end_date')
+            query.end_time = request.input('end_time')
             query.details = request.input('details')
 
             await query.save()
@@ -88,6 +96,10 @@ class TaskController {
         if (query) {
             query.user_id = request.input('user_id')
             query.name = request.input('name')
+            query.start_date = request.input('start_date')
+            query.start_time = request.input('start_time')
+            query.end_date = request.input('end_date')
+            query.end_time = request.input('end_time')
             query.details = request.input('details')
             await query.save()
             return response.status(200).send({

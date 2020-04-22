@@ -5,6 +5,7 @@ const searchInFields = [
     'name',
     'mobile',
     'email',
+    'dob',
 ]
 class UserController {
     async index({ request, response }) {
@@ -59,6 +60,7 @@ class UserController {
             query.name = request.input('name')
             query.mobile = request.input('mobile')
             query.email = request.input('email')
+            query.dob = request.input('dob')
             await query.save()
             return response.status(200).send({
                 message: Antl.formatMessage('response.create_success', { name: "User" })
@@ -89,6 +91,7 @@ class UserController {
             query.name = request.input('name')
             query.mobile = request.input('mobile')
             query.email = request.input('email')
+            query.dob = request.input('dob')
             await query.save()
             return response.status(200).send({
                 message: Antl.formatMessage('response.update_success', { name: "User" })

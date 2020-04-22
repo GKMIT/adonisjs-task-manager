@@ -9,6 +9,7 @@ class UserSchema extends Schema {
       table.increments()
       table.integer('role_id').unsigned().references('id').inTable('roles').onDelete('restrict').onUpdate('cascade')
       table.string('name', 100).nullable()
+      table.date('dob').nullable()
       table.string('mobile', 10).nullable()
       table.string('email', 254).notNullable().unique()
       table.string('password', 60).nullable()

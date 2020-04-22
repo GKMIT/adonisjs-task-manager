@@ -5,7 +5,7 @@ const Hash = use('Hash')
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
-
+const moment = require("moment");
 class User extends Model {
   static get hidden() {
     return ['password']
@@ -23,6 +23,24 @@ class User extends Model {
         userInstance.password = await Hash.make(userInstance.password)
       }
     })
+  }
+
+  static get dates() {
+    return super.dates.concat(['dob'])
+  }
+
+  static formatDates(field, value) {
+    if (field === 'dob') {
+      return moment(value).format('MM-DD-YYYY')
+    }
+    return super.formatDates(field, value)
+  }
+
+  static castDates(field, value) {
+    if (field === 'dob') {
+      return moment(value).format('MM-DD-YYYY')
+    }
+    return super.formatDates(field, value)
   }
 
   /**

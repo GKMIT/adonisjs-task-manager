@@ -49,6 +49,12 @@ Run the following command to run startup migrations.
 adonis migration:run
 ```
 
+Run the following command to run startup seeds.
+
+```js
+adonis seed
+```
+
 ### Create User
 
 Run the following command to create users.
