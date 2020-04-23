@@ -49,8 +49,11 @@ Route.group(() => {
     Route.delete('/:id', 'RoleController.destroy')
 }).prefix('/roles').middleware('auth')
 
+
+
 Route.group(() => {
     Route.get('/', 'TaskController.index')
+    Route.get('/all', 'TaskController.all')
     Route.get('/:id', 'TaskController.show')
     Route.post('/', 'TaskController.store').validator('StoreTask')
     Route.put('/:id', 'TaskController.update').validator('StoreTask')
