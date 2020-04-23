@@ -131,6 +131,25 @@ class TaskController {
             })
         }
     }
+
+    async all({ request, response }) {
+        const query = Task.query()
+
+        if (request.input('user_id')) {
+            query.where('user_id', request.input('user_id'))
+        }
+        const result = await query.fetch()
+        if (result) {
+            const data = {
+                data: result
+            }
+            return response.status(200).send(data)
+        } else {
+            return response.status(404).send({
+                message: Antl.formatMessage('response.not_found', { name: "Task" })
+            })
+        }
+    }
 }
 
 module.exports = TaskController
