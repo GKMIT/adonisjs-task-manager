@@ -1,6 +1,7 @@
 'use strict'
 const User = use('App/Models/User');
 const Antl = use('Antl')
+const Query = use('Query')
 const searchInFields = [
     'name',
     'mobile',
@@ -22,16 +23,15 @@ class UserController {
         const search = request.input('search')
         const orderBy = request.input('orderBy')
         const orderDirection = request.input('orderDirection')
-
+        const searchQuery = new Query(request, { order: 'id' })
         const query = User.query()
 
         if (orderBy && orderDirection) {
             query.orderBy(`${orderBy}`, orderDirection)
         }
+        
         if (search) {
-            searchInFields.forEach(filed => {
-                query.whereRaw(`${filed} LIKE '%${search}%'`)
-            })
+            query.where(searchQuery.search(searchInFields))
         }
 
         if (request.input('filters')) {

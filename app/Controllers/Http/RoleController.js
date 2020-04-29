@@ -2,6 +2,7 @@
 const Role = use('App/Models/Role');
 const PermissionRole = use('App/Models/PermissionRole')
 const Antl = use('Antl')
+const Query = use('Query')
 const searchInFields = [
     'name',
 ]
@@ -20,16 +21,16 @@ class RoleController {
         const search = request.input('search')
         const orderBy = request.input('orderBy')
         const orderDirection = request.input('orderDirection')
+        const searchQuery = new Query(request, { order: 'id' })
 
         const query = Role.query()
 
         if (orderBy && orderDirection) {
             query.orderBy(`${orderBy}`, orderDirection)
         }
+        
         if (search) {
-            searchInFields.forEach(filed => {
-                query.whereRaw(`${filed} LIKE '%${search}%'`)
-            })
+            query.where(searchQuery.search(searchInFields))
         }
 
         if (request.input('filters')) {
