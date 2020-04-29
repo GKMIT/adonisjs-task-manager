@@ -1,13 +1,9 @@
 'use strict'
 const Task = use('App/Models/Task');
 const Antl = use('Antl')
-
+const Query = use('Query')
 const searchInFields = [
-    'name',
-    'start_date',
-    'start_time',
-    'end_date',
-    'end_time',
+    'name',    
     'details'
 ]
 class TaskController {
@@ -26,16 +22,15 @@ class TaskController {
         const search = request.input('search')
         const orderBy = request.input('orderBy')
         const orderDirection = request.input('orderDirection')
-
+        const searchQuery = new Query(request, { order: 'id' })
         const query = Task.query()
 
         if (orderBy && orderDirection) {
             query.orderBy(`${orderBy}`, orderDirection)
         }
+        
         if (search) {
-            searchInFields.forEach(filed => {
-                query.whereRaw(`${filed} LIKE '%${search}%'`)
-            })
+            query.where(searchQuery.search(searchInFields))
         }
 
         if (request.input('filters')) {
