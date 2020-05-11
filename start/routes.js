@@ -59,3 +59,10 @@ Route.group(() => {
     Route.put('/:id', 'TaskController.update').validator('StoreTask')
     Route.delete('/:id', 'TaskController.destroy')
 }).prefix('/tasks').middleware('auth')
+
+
+// file upload
+Route.group(() => {
+    Route.post('/document', 'FileController.document')
+    Route.post('/image', 'FileController.image')
+}).prefix('/upload').middleware('auth')
