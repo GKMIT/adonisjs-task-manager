@@ -28,7 +28,7 @@ class PermissionController {
         if (orderBy && orderDirection) {
             query.orderBy(`${orderBy}`, orderDirection)
         }
-        
+
         if (search) {
             query.where(searchQuery.search(searchInFields))
         }
@@ -100,14 +100,16 @@ class PermissionController {
     async destroy({ params, response }) {
         let query = await Permission.find(params.id)
         if (query) {
-            const result = await query.delete()
-            if (result) {
-                return response.status(200).send({
-                    message: Antl.formatMessage('response.delete_success', { name: "Permission" })
-                })
-            } else {
+            try {
+                const result = await query.delete()
+                if (result) {
+                    return response.status(200).send({
+                        message: Antl.formatMessage('response.delete_success', { name: "Permission" })
+                    })
+                }
+            } catch (error) {
                 return response.status(500).send({
-                    message: Antl.formatMessage('response.something_went_wrong')
+                    message: error
                 })
             }
         } else {
