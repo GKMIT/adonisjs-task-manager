@@ -5,8 +5,7 @@ const Query = use('Query')
 const searchInFields = [
     'name',
     'mobile',
-    'email',
-    'dob',
+    'email',    
 ]
 class UserController {
     async index({ request, response }) {
