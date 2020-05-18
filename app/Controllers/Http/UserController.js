@@ -5,8 +5,7 @@ const Query = use('Query')
 const searchInFields = [
     'name',
     'mobile',
-    'email',
-    'dob',
+    'email',    
 ]
 class UserController {
     async index({ request, response }) {
@@ -29,7 +28,7 @@ class UserController {
         if (orderBy && orderDirection) {
             query.orderBy(`${orderBy}`, orderDirection)
         }
-        
+
         if (search) {
             query.where(searchQuery.search(searchInFields))
         }
@@ -106,14 +105,20 @@ class UserController {
     async destroy({ params, response }) {
         let query = await User.find(params.id)
         if (query) {
-            const result = await query.delete()
-            if (result) {
-                return response.status(200).send({
-                    message: Antl.formatMessage('response.delete_success', { name: "User" })
-                })
-            } else {
+            try {
+                const result = await query.delete()
+                if (result) {
+                    return response.status(200).send({
+                        message: Antl.formatMessage('response.delete_success', { name: "User" })
+                    })
+                } else {
+                    return response.status(500).send({
+                        message: Antl.formatMessage('response.something_went_wrong')
+                    })
+                }
+            } catch (error) {
                 return response.status(500).send({
-                    message: Antl.formatMessage('response.something_went_wrong')
+                    message: error
                 })
             }
         } else {

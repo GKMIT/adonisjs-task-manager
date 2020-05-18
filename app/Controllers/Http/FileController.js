@@ -32,7 +32,9 @@ class FileController {
                 }
             }
         } catch (error) {
-            throw new Error(error.message)
+            return response.status(500).send({
+                message: error
+            })
         }
     }
 
@@ -64,7 +66,9 @@ class FileController {
                 }
             }
         } catch (error) {
-            throw new Error(error.message)
+            return response.status(500).send({
+                message: error
+            })
         }
     }
 }
