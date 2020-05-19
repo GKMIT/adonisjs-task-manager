@@ -22,6 +22,7 @@ Route.on('/').render('welcome')
 Route.group(() => {
     Route.post('/register', 'AuthController.register').validator('StoreUser')
     Route.post('/login', 'AuthController.login').validator('Login')
+    Route.post('/firebase_login', 'AuthController.firebaseLogin')
 }).prefix('/auth')
 
 Route.group(() => {
