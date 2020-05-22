@@ -5,7 +5,7 @@ const Query = use('Query')
 const searchInFields = [
     'name',
     'mobile',
-    'email',    
+    'email',
 ]
 class UserController {
     async index({ request, response }) {
@@ -106,6 +106,12 @@ class UserController {
         let query = await User.find(params.id)
         if (query) {
             try {
+                let total = await User.getCount()
+                if (total == 1) {
+                    return response.status(500).send({
+                        message: Antl.formatMessage('response.user_delete_error', { name: `${query.name}(${query.email})` })
+                    })
+                }
                 const result = await query.delete()
                 if (result) {
                     return response.status(200).send({
